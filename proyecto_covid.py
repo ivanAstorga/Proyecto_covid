@@ -1,4 +1,4 @@
-import matplotlib.pyplot as plt
+import matplotlib.pyplot as plt #importamos la libreria de graficos
 
 def filtrarUltimasFechas(): #Función para alistar las últimas 7 fechas requeridas
     with open("Datos.csv", "r", encoding="utf-8") as file:  #abrirá el archivo, encriptando a utf-8
@@ -30,7 +30,7 @@ def listadoDeComunas():  #Función para mostrar al usuario el listado de comunas
     
     return nombreComunas, codigoComunas
 
-def comunayDatosSeleccionados(comuna):
+def comunayDatosSeleccionados(comuna): #definimos la funcion
     with open("Datos.csv", "r", encoding="utf-8") as file:
         lineas = file.read().splitlines()
         for i in lineas:
@@ -137,11 +137,11 @@ def regionyDatosSeleccionadosAcumulados(region):    #Función para crear las úl
     
     return sumarIndices
 
-def regionyDatosSeleccionadosNoAcumulados(region):
+def regionyDatosSeleccionadosNoAcumulados(region): #definimos funcion
     listaCompleta = []
     with open("Datos.csv", "r", encoding="utf-8") as file:
         lineas = file.read().splitlines()   
-        lineas.pop(0)   #eliminó la sección primaria del listado para ocupar solamente los datos relevantes para las estadísticas
+        lineas.pop(0)   #se elimina la sección primaria del listado para ocupar solamente los datos relevantes para las estadísticas
         for i in lineas:
             linea = i.split(",")
             if region in linea:
@@ -190,24 +190,12 @@ def graficoNoAcumuladosRegion(fechas,selectRegionNoAcum):   #función para grafi
 #-----------------------------------------      MENÚ USUARIO     --------------------------------------------------
 #------------------------------------------------------------------------------------------------------------------
 
-def regionMenoryMayorContagios():
-    matriz = []
-    with open("Datos.csv", "r", encoding="utf-8") as file:
-        lineas = file.read().splitlines()
-        for i in lineas:
-            linea = i.split(",")
-            matriz.append(linea)
-            for n, h in enumerate(linea):  #Bucle que reemplazará elementos vacíos por ceros
-                if h == "":
-                    linea[n] = 0.0
-
 print("***** Menú de selección *****")
 print("(1) Filtrar comunas.")
 print("(2) Filtrar regiones.")
-print("(3) Mostrar la comuna con menor y mayor cantidad de contagios.")
-print("(4) Salir.")
+print("(3) Salir.")
 filtro = input("Ingrese la opción según el número correspondiente: ")
-while int(filtro) < 1 or int(filtro) > 4:
+while int(filtro) < 1 or int(filtro) > 3: # condicion para que el usuario ingrese solamente los numeros correspondientes
     print("Error en la selección. Favor ingrese la opción que se muestra en el menú.")
     filtro = input(">>> ")
 
@@ -216,13 +204,13 @@ fechas = filtrarUltimasFechas() #Llamado a la función para filtrar las últimas
 if filtro == "1":   #Selección de comunas
     listadoComunas = listadoDeComunas()
     comuna = input("Ingrese el nombre o código de la comuna: ")
-    while comuna not in listadoComunas[0] and comuna not in listadoComunas[1]:
+    while comuna not in listadoComunas[0] and comuna not in listadoComunas[1]: #while para hacerle saber al usuario que se a equivocado en escribir su opcion deseada
         print("Nombre o código de la comuna ingresada no es válida.")
         comuna = input("Ingrese nuevamente: ")
     print("Mostrar gráfico de contagios acumulativos para la comuna -> Ingrese (a).")
     print("Mostrar gráfico de contagios no acumulativos para la comuna -> Ingrese (b).")
     opcion = input("Ingrese (a) o (b): ")
-    while opcion != "a" and opcion != "b":
+    while opcion != "a" and opcion != "b": #while para decirle al usuario que ha ingresado opciones no validas
         print("Error en la selección. Favor ingrese (a) o (b) según la indicación previamente mostrada.")
         opcion = input("Ingrese (a) o (b) nuevamente: ")
     if opcion == "a":    #Mostrará gráfico de contagios acumulativos de la comuna seleccionada
@@ -237,13 +225,13 @@ if filtro == "1":   #Selección de comunas
 elif filtro == "2": #Selección de regiones
     listadoRegiones = listadoDeRegiones()
     region = input("Ingrese el nombre o código de la región: ")
-    while region not in listadoRegiones[0] and region not in listadoRegiones[1]:
+    while region not in listadoRegiones[0] and region not in listadoRegiones[1]: #while para decirle al usuario que se ha equivocado al escribir el codigo o nombre de la region seleccionada
         print("Nombre o código de la Región ingresada no es válida.")
         region = input("Ingrese nuevamente: ")
     print("Mostrar gráfico de contagios acumulativos para la región -> Ingrese (a).")
     print("Mostrar gráfico de contagios no acumulativos para la región -> Ingrese (b).")
     tipoDeGrafico = input("Ingrese (a) o (b): ")
-    while tipoDeGrafico != "a" and tipoDeGrafico != "b":
+    while tipoDeGrafico != "a" and tipoDeGrafico != "b": #while para decirle al usuario que se ha introducido opciones noo validas
         print("Error en la selección. Favor ingrese (a) o (b) según la indicación previamente mostrada.")
         tipoDeGrafico = input("Ingrese (a) o (b) nuevamente: ")
     if tipoDeGrafico == "a":    #Mostrará gráfico de contagios acumulativos de la región seleccionada
@@ -252,9 +240,6 @@ elif filtro == "2": #Selección de regiones
     else:   #Mostrará gráfico de contagios no acumulativos de la región seleccionada
         selectRegionNoAcum = regionyDatosSeleccionadosNoAcumulados(region)
         graficoNoAcumuladosRegion = graficoNoAcumuladosRegion(fechas, selectRegionNoAcum)
-
-elif filtro == "3": #Cantidad menor y mayor de contagios según comuna y región
-    menorMayor = regionMenoryMayorContagios()
 
 else:   #Selección de Salir
     print("")
